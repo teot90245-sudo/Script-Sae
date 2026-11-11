@@ -1,0 +1,219 @@
+--[[
+    AK KIEN SCRIPT - KEYLESS PRO EDITION
+    Roblox LocalScript
+]]
+
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local ICON_IMAGE = "rbxassetid://0" -- Thay bằng ID ảnh Oggy
+
+local old = playerGui:FindFirstChild("AKKienUI")
+if old then old:Destroy() end
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "AKKienUI"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = playerGui
+
+local function corner(obj, radius)
+    local c = Instance.new("UICorner")
+    c.CornerRadius = UDim.new(0, radius)
+    c.Parent = obj
+end
+
+local function stroke(obj, color)
+    local s = Instance.new("UIStroke")
+    s.Color = color
+    s.Thickness = 1.5
+    s.Parent = obj
+    return s
+end
+
+local main = Instance.new("Frame")
+main.Name = "Main"
+main.Size = UDim2.fromOffset(350, 245)
+main.Position = UDim2.new(0.5, -175, 0.5, -122)
+main.BackgroundColor3 = Color3.fromRGB(17, 18, 27)
+main.BorderSizePixel = 0
+main.Parent = gui
+corner(main, 16)
+
+local outline = stroke(main, Color3.fromRGB(139, 92, 246))
+
+local header = Instance.new("Frame")
+header.Size = UDim2.new(1, 0, 0, 66)
+header.BackgroundColor3 = Color3.fromRGB(25, 26, 39)
+header.BorderSizePixel = 0
+header.Parent = main
+corner(header, 16)
+
+local cover = Instance.new("Frame")
+cover.Size = UDim2.new(1, 0, 0, 16)
+cover.Position = UDim2.new(0, 0, 1, -16)
+cover.BackgroundColor3 = header.BackgroundColor3
+cover.BorderSizePixel = 0
+cover.Parent = header
+
+local icon = Instance.new("ImageLabel")
+icon.Size = UDim2.fromOffset(46, 46)
+icon.Position = UDim2.fromOffset(12, 10)
+icon.BackgroundColor3 = Color3.fromRGB(38, 39, 55)
+icon.Image = ICON_IMAGE
+icon.ScaleType = Enum.ScaleType.Crop
+icon.Parent = header
+corner(icon, 12)
+stroke(icon, Color3.fromRGB(139, 92, 246))
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -122, 0, 25)
+title.Position = UDim2.fromOffset(68, 11)
+title.BackgroundTransparency = 1
+title.Text = "AK KIEN SCRIPT"
+title.TextColor3 = Color3.fromRGB(248, 250, 255)
+title.TextSize = 17
+title.Font = Enum.Font.GothamBold
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = header
+
+local subtitle = Instance.new("TextLabel")
+subtitle.Size = UDim2.new(1, -122, 0, 18)
+subtitle.Position = UDim2.fromOffset(69, 35)
+subtitle.BackgroundTransparency = 1
+subtitle.Text = "KEYLESS  •  PRO EDITION"
+subtitle.TextColor3 = Color3.fromRGB(167, 139, 250)
+subtitle.TextSize = 10
+subtitle.Font = Enum.Font.GothamMedium
+subtitle.TextXAlignment = Enum.TextXAlignment.Left
+subtitle.Parent = header
+
+local close = Instance.new("TextButton")
+close.Size = UDim2.fromOffset(30, 30)
+close.Position = UDim2.new(1, -40, 0, 17)
+close.BackgroundColor3 = Color3.fromRGB(48, 40, 58)
+close.Text = "×"
+close.TextColor3 = Color3.new(1, 1, 1)
+close.TextSize = 22
+close.Font = Enum.Font.GothamBold
+close.Parent = header
+corner(close, 9)
+
+local status = Instance.new("TextLabel")
+status.Size = UDim2.new(1, -32, 0, 38)
+status.Position = UDim2.fromOffset(16, 82)
+status.BackgroundColor3 = Color3.fromRGB(27, 29, 42)
+status.Text = "  ●  AK Kien đã sẵn sàng"
+status.TextColor3 = Color3.fromRGB(187, 247, 208)
+status.TextSize = 12
+status.Font = Enum.Font.GothamMedium
+status.TextXAlignment = Enum.TextXAlignment.Left
+status.Parent = main
+corner(status, 9)
+
+local info = Instance.new("TextLabel")
+info.Size = UDim2.new(1, -32, 0, 42)
+info.Position = UDim2.fromOffset(16, 128)
+info.BackgroundTransparency = 1
+info.Text = "Đã bỏ xác thực Key và thời gian dùng thử.\nAK KIEN SCRIPT đang hoạt động."
+info.TextColor3 = Color3.fromRGB(170, 174, 190)
+info.TextSize = 11
+info.Font = Enum.Font.Gotham
+info.TextWrapped = true
+info.Parent = main
+
+local action = Instance.new("TextButton")
+action.Name = "ActionButton"
+action.Size = UDim2.new(1, -32, 0, 38)
+action.Position = UDim2.fromOffset(16, 180)
+action.BackgroundColor3 = Color3.fromRGB(124, 78, 230)
+action.Text = "AK KIEN"
+action.TextColor3 = Color3.new(1, 1, 1)
+action.TextSize = 13
+action.Font = Enum.Font.GothamBold
+action.Parent = main
+corner(action, 10)
+
+local footer = Instance.new("TextLabel")
+footer.Size = UDim2.new(1, -32, 0, 14)
+footer.Position = UDim2.fromOffset(16, 222)
+footer.BackgroundTransparency = 1
+footer.Text = "AK KIEN • UI EDITION"
+footer.TextColor3 = Color3.fromRGB(105, 110, 130)
+footer.TextSize = 9
+footer.Font = Enum.Font.GothamMedium
+footer.Parent = main
+
+local function tween(obj, properties, duration)
+    TweenService:Create(
+        obj,
+        TweenInfo.new(duration or 0.18),
+        properties
+    ):Play()
+end
+
+action.Activated:Connect(function()
+    status.Text = "  ●  Giao diện hoạt động bình thường"
+end)
+
+close.Activated:Connect(function()
+    tween(main, {Size = UDim2.fromOffset(0, 0)}, 0.18)
+    task.wait(0.2)
+    gui:Destroy()
+end)
+
+-- Kéo giao diện bằng chuột hoặc cảm ứng
+local dragging = false
+local dragStart
+local startPosition
+
+header.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1
+    or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPosition = main.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (
+        input.UserInputType == Enum.UserInputType.MouseMovement
+        or input.UserInputType == Enum.UserInputType.Touch
+    ) then
+        local delta = input.Position - dragStart
+        main.Position = UDim2.new(
+            startPosition.X.Scale,
+            startPosition.X.Offset + delta.X,
+            startPosition.Y.Scale,
+            startPosition.Y.Offset + delta.Y
+        )
+    end
+end)
+
+-- Hiệu ứng viền neon
+task.spawn(function()
+    while gui.Parent do
+        tween(outline, {
+            Color = Color3.fromRGB(91, 145, 255)
+        }, 1.2)
+        task.wait(1.2)
+
+        if not gui.Parent then break end
+
+        tween(outline, {
+            Color = Color3.fromRGB(170, 90, 255)
+        }, 1.2)
+        task.wait(1.2)
+    end
+end)
